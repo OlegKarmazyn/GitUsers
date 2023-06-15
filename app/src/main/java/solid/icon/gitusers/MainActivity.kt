@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,7 +27,7 @@ import kotlinx.coroutines.withContext
 import solid.icon.gitusers.data.repositories.models.User
 
 //test data
-val users = listOf<User>(
+val users = listOf(
     User(
         login = "mojombo1",
         id = 5,
@@ -51,7 +52,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LazyColumn {
+            LazyColumn { //todo: redone using viewModel (could be LiveData)
                 items(users.size) { id ->
                     UserCell(user = users[id])
                 }
@@ -84,6 +85,7 @@ fun UserCell(user: User) {
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
+                    .border(1.5.dp, MaterialTheme.colors.onSecondary, CircleShape)
             )
         }
 
