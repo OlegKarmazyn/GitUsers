@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -26,32 +27,37 @@ import solid.icon.gitusers.data.repositories.users_data.User
 import solid.icon.gitusers.data.view_models.MainViewModel
 
 class MainActivity : ComponentActivity() {
-    private lateinit var userViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val userRepository = UserRepository() //todo redone with kodein
-        userViewModel = MainViewModel(userRepository)
+        viewModel = MainViewModel(userRepository)
 
         setContent {
-            val users by userViewModel.users
-            UserList(users)
+            val users by viewModel.users
+            UserList(users){ login ->
+                viewModel.goToUserDetails(login)
+            }
         }
     }
 }
 
 @Composable
-fun UserList(users: List<User>) {
+fun UserList(users: List<User>, onClick: (login: String) -> Unit) {
     LazyColumn {
         items(users.size) { id ->
-            UserCell(users[id])
+            val user = users[id]
+            UserCell(user = user) {
+                onClick(user.login)
+            }
         }
     }
 }
 
 @Composable
-fun UserCell(user: User) {
+fun UserCell(user: User, onUserClick: () -> Unit) {
     val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
 
     LaunchedEffect(user.avatar_url) {
@@ -61,11 +67,14 @@ fun UserCell(user: User) {
         }
     }
 
+    val modifier = Modifier
+        .height(80.dp)
+        .fillMaxWidth()
+        .padding(8.dp)
+        .clickable { onUserClick() }
+
     Row(
-        modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth()
-            .padding(8.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         imageBitmap.value?.let { bitmap ->

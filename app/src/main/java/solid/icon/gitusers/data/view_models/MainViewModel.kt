@@ -22,4 +22,8 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
             users.value = userList
         }
     }
+
+    fun goToUserDetails(login: String) {
+        TODO("Not yet implemented")
+    }
 }
