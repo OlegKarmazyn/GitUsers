@@ -1,15 +1,11 @@
 package solid.icon.gitusers
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -34,8 +30,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val userRepository = UserRepository() // Создаем экземпляр UserRepository
 
+        val userRepository = UserRepository() //todo redone with kodein
         userViewModel = MainViewModel(userRepository)
 
         setContent {
@@ -58,23 +54,18 @@ fun UserList(users: List<User>) {
 fun UserCell(user: User) {
     val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
 
-    LaunchedEffect(user.avatarUrl) {
+    LaunchedEffect(user.avatar_url) {
         withContext(Dispatchers.IO) {
-            try {
-                val bitmap = Picasso.get().load(user.avatarUrl).get()
-                if (bitmap != null) {
-                    imageBitmap.value = bitmap.asImageBitmap() //todo: fix - doesn't download
-                }
-            } catch (e: Exception) {
-                Log.e("Exception: ", e.toString())
-            }
+            val bitmap = Picasso.get().load(user.avatar_url).get()
+            imageBitmap.value = bitmap.asImageBitmap()
         }
     }
 
     Row(
         modifier = Modifier
+            .height(80.dp)
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         imageBitmap.value?.let { bitmap ->
