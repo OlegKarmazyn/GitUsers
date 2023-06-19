@@ -18,8 +18,8 @@ package solid.icon.gitusers
 
 // todo:
 //  1. Get users in list
-//  1.1 make ipl. Kodein lib
-//  1.2 define App (main) class
+//  1.1 make ipl. Kodein lib +
+//  1.2 define App (main) class +
 //  1.3 define viewModel for MainActivity
 //  1.4 define Model which get list (async)
 //  1.5 define repository for viewModel

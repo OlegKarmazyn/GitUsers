@@ -1,6 +1,7 @@
 package solid.icon.gitusers
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -24,39 +25,31 @@ import androidx.compose.ui.unit.dp
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import solid.icon.gitusers.data.repositories.models.User
-
-//test data
-val users = listOf(
-    User(
-        login = "mojombo1",
-        id = 5,
-        avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
-        url = "https://api.github.com/users/mojombo",
-        htmlUrl = "https://github.com/mojombo",
-        reposUrl = "https://api.github.com/users/mojombo/repos"
-    ),
-    User(
-        login = "mojombo2",
-        id = 5,
-        avatarUrl = "https://avatars.githubusercontent.com/u/2?v=4",
-        url = "https://api.github.com/users/mojombo",
-        htmlUrl = "https://github.com/mojombo",
-        reposUrl = "https://api.github.com/users/mojombo/repos"
-    )
-)
+import solid.icon.gitusers.data.repositories.UserRepository
+import solid.icon.gitusers.data.repositories.users_data.User
+import solid.icon.gitusers.data.view_models.MainViewModel
 
 class MainActivity : ComponentActivity() {
-
+    private lateinit var userViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val userRepository = UserRepository() // Создаем экземпляр UserRepository
+
+        userViewModel = MainViewModel(userRepository)
+
         setContent {
-            LazyColumn { //todo: redone using viewModel (could be LiveData)
-                items(users.size) { id ->
-                    UserCell(user = users[id])
-                }
-            }
+            val users by userViewModel.users
+            UserList(users)
+        }
+    }
+}
+
+@Composable
+fun UserList(users: List<User>) {
+    LazyColumn {
+        items(users.size) { id ->
+            UserCell(users[id])
         }
     }
 }
@@ -67,8 +60,14 @@ fun UserCell(user: User) {
 
     LaunchedEffect(user.avatarUrl) {
         withContext(Dispatchers.IO) {
-            val bitmap = Picasso.get().load(user.avatarUrl).get()
-            imageBitmap.value = bitmap.asImageBitmap()
+            try {
+                val bitmap = Picasso.get().load(user.avatarUrl).get()
+                if (bitmap != null) {
+                    imageBitmap.value = bitmap.asImageBitmap() //todo: fix - doesn't download
+                }
+            } catch (e: Exception) {
+                Log.e("Exception: ", e.toString())
+            }
         }
     }
 

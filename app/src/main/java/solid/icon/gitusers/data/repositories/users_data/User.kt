@@ -1,4 +1,4 @@
-package solid.icon.gitusers.data.repositories.models
+package solid.icon.gitusers.data.repositories.users_data
 
 data class User(
     val login: String,
