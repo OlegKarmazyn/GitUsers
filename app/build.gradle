@@ -62,4 +62,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
     implementation 'com.squareup.picasso:picasso:2.8'
+
+    // Kodein
+    implementation "org.kodein.di:kodein-di-generic-jvm:6.4.0"
+    implementation "org.kodein.di:kodein-di-framework-android-x:6.4.0"
 }
