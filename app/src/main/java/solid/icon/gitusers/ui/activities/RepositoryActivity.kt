@@ -34,27 +34,26 @@ class RepositoryActivity : ComponentActivity() {
             RepositoryScreen(repositories)
         }
     }
-}
-
-@Composable
-fun RepositoryScreen(repositories: List<Repository>) {
-    LazyColumn {
-        items(repositories.size) { id ->
-            RepositoryItem(repositories[id])
+    @Composable
+    fun RepositoryScreen(repositories: List<Repository>) {
+        LazyColumn {
+            items(repositories.size) { id ->
+                RepositoryItem(repositories[id])
+            }
         }
     }
-}
 
-@Composable
-fun RepositoryItem(repository: Repository) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = repository.name, style = MaterialTheme.typography.h6)
-        repository.description?.let {
-            Text(text = repository.description, style = MaterialTheme.typography.body1)
+    @Composable
+    fun RepositoryItem(repository: Repository) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(text = repository.name, style = MaterialTheme.typography.h6)
+            repository.description?.let {
+                Text(text = repository.description, style = MaterialTheme.typography.body1)
+            }
         }
     }
 }
