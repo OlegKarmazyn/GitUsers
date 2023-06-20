@@ -68,7 +68,7 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
     @Composable
     fun RepositoryAppBar(onBackPressed: () -> Unit, login: String) {
         TopAppBar(
-            title = { Text(text = "$login Repository List") },
+            title = { Text(text = "$login's Repository List") },
             navigationIcon = {
                 IconButton(
                     onClick = { onBackPressed() }
