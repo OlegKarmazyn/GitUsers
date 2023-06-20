@@ -18,8 +18,8 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
     var login = String()
 
     private fun fetchUserRepositories(login: String) {
+        isLoading.value = true
         viewModelScope.launch {
-            isLoading.value = true
             repositories.value = detailsRepository.getUserRepositories(login)
             checkIfListEmpty(repositories.value)
             isLoading.value = false

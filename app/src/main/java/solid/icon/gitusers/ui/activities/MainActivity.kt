@@ -30,6 +30,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 import solid.icon.gitusers.data.repositories.users_data.User
 import solid.icon.gitusers.data.view_models.MainViewModel
+import solid.icon.gitusers.ui.components.LoadingBox
 
 class MainActivity : ComponentActivity(), KodeinAware {
 
@@ -41,14 +42,15 @@ class MainActivity : ComponentActivity(), KodeinAware {
 
         setContent {
             val users by viewModel.users
-            UserList(users) { login ->
+            val isLoading by viewModel.isLoading
+            UserList(users, isLoading) { login ->
                 viewModel.goToUserDetails(login, this)
             }
         }
     }
 
     @Composable
-    fun UserList(users: List<User>, onClick: (login: String) -> Unit) {
+    fun UserList(users: List<User>, isLoading: Boolean, onClick: (login: String) -> Unit) {
         LazyColumn {
             items(users.size) { id ->
                 val user = users[id]
@@ -57,6 +59,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
                 }
             }
         }
+        LoadingBox(isLoading)
     }
 
     @Composable

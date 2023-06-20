@@ -13,16 +13,19 @@ import solid.icon.gitusers.data.repositories.users_data.User
 import solid.icon.gitusers.ui.activities.RepositoryActivity
 
 class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
+
     val users: MutableState<List<User>> = mutableStateOf(emptyList())
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     init {
         fetchUsers()
     }
 
     private fun fetchUsers() {
+        isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val userList = userRepository.getUsers()
-            users.value = userList
+            users.value = userRepository.getUsers()
+            isLoading.value = false
         }
     }
 
