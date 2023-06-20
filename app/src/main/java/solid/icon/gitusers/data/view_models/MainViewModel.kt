@@ -17,15 +17,15 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     val users: MutableState<List<User>> = mutableStateOf(emptyList())
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
-    private val userSize = 10
-    private var currentPage = 0
+    private val filesSize = 10
+    private var currentUser = 0
 
     private fun fetchUsers() {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            val fetchedUsers = userRepository.getUsers(currentPage, userSize)
+            val fetchedUsers = userRepository.getUsers(currentUser, filesSize)
             users.value = users.value + fetchedUsers
-            currentPage = users.value.last().id
+            currentUser = users.value.last().id
             isLoading.value = false
         }
     }

@@ -1,6 +1,5 @@
 package solid.icon.gitusers.data.repositories
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import solid.icon.gitusers.data.repositories.api.ApiClient
@@ -11,14 +10,13 @@ class UserRepository {
 
     private val apiService: ApiService = ApiClient.getApiService()
 
-    suspend fun getUsers(page: Int, pageSize: Int): List<User> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            Log.e("page", page.toString())
-            Log.e("pageSize", pageSize.toString())
-            apiService.getUsers(page, pageSize)
-        } catch (e: Exception) {
-            emptyList()
+    suspend fun getUsers(currentUser: Int, filesSize: Int): List<User> =
+        withContext(Dispatchers.IO) {
+            return@withContext try {
+                apiService.getUsers(currentUser, filesSize)
+            } catch (e: Exception) {
+                emptyList()
+            }
         }
-    }
 }
 

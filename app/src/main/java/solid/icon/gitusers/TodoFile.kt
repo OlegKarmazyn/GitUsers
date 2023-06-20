@@ -32,6 +32,6 @@ package solid.icon.gitusers
 //  2.1 define activity, cell for rep +
 //      viewModel and model
 //  ------------------------------------------
-//  3. Implement pagination + loading
+//  3. Implement pagination + loading +-
 //  ------------------------------------------
 //  4. Create database and use it
