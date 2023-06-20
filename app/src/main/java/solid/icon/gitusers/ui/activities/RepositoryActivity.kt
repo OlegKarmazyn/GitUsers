@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import es.dmoral.toasty.Toasty
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -34,8 +35,15 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
         setContent {
             val repositories by viewModel.repositories
             val isLoading by viewModel.isLoading
+            val isListEmpty by viewModel.isListEmpty
+            showToastIfEmptyList(isListEmpty, viewModel.login)
             RepositoryScreen(repositories, isLoading, viewModel.login)
         }
+    }
+
+    private fun showToastIfEmptyList(isListEmpty: Boolean, login: String) {
+        if (isListEmpty)
+            Toasty.warning(this, "$login doesn't have repositories").show()
     }
 
     @Composable
