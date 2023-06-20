@@ -1,4 +1,4 @@
-package solid.icon.gitusers
+package solid.icon.gitusers.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val users by viewModel.users
             UserList(users){ login ->
-                viewModel.goToUserDetails(login)
+                viewModel.goToUserDetails(login, this)
             }
         }
     }
