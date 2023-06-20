@@ -3,8 +3,23 @@ package solid.icon.gitusers
 import android.app.Application
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.androidXModule
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.singleton
+import solid.icon.gitusers.data.repositories.UserRepository
+import solid.icon.gitusers.data.view_models.MainViewModel
 
 class App: Application(), KodeinAware {
-    override val kodein: Kodein
-        get() = TODO("Not yet implemented")
+    override val kodein: Kodein = Kodein.lazy {
+        import(androidXModule(this@App))
+
+        //bind() from singleton { UserDatabase(instance()) }
+
+        bind() from singleton { UserRepository() } //todo define database *instance()*
+        //bind() from singleton { DetailsRepository() } //todo define this class
+
+        bind() from singleton { MainViewModel(instance()) }
+        //bind() from singleton { DetailsViewModel(instance()) }
+    }
 }

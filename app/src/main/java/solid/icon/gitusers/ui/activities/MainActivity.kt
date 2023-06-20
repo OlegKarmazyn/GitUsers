@@ -22,22 +22,23 @@ import androidx.compose.ui.unit.dp
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import solid.icon.gitusers.data.repositories.UserRepository
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 import solid.icon.gitusers.data.repositories.users_data.User
 import solid.icon.gitusers.data.view_models.MainViewModel
 
-class MainActivity : ComponentActivity() {
-    private lateinit var viewModel: MainViewModel
+class MainActivity : ComponentActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val viewModel: MainViewModel by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val userRepository = UserRepository() //todo redone with kodein
-        viewModel = MainViewModel(userRepository)
-
         setContent {
             val users by viewModel.users
-            UserList(users){ login ->
+            UserList(users) { login ->
                 viewModel.goToUserDetails(login, this)
             }
         }
