@@ -9,8 +9,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -43,19 +45,50 @@ class MainActivity : ComponentActivity(), KodeinAware {
         setContent {
             val users by viewModel.users
             val isLoading by viewModel.isLoading
-            UserList(users, isLoading) { login ->
-                viewModel.goToUserDetails(login, this)
+
+            UserList(users, isLoading,
+                onClick = { login ->
+                    viewModel.goToUserDetails(login, this)
+                }, onLoadMore = {
+                    viewModel.loadMoreUsers()
+                })
+
+            val listState = rememberLazyListState()
+            LaunchedEffect(listState) {
+                val visibleItemCount = listState.layoutInfo.visibleItemsInfo.size
+                val totalItemCount = listState.layoutInfo.totalItemsCount
+                val firstVisibleItemIndex =
+                    listState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
+
+                if (visibleItemCount + firstVisibleItemIndex >= totalItemCount) {
+                    viewModel.loadMoreUsers()
+                }
             }
         }
     }
 
     @Composable
-    fun UserList(users: List<User>, isLoading: Boolean, onClick: (login: String) -> Unit) {
+    fun UserList(
+        users: List<User>,
+        isLoading: Boolean,
+        onClick: (login: String) -> Unit,
+        onLoadMore: () -> Unit
+    ) {
         LazyColumn {
             items(users.size) { id ->
                 val user = users[id]
                 UserCell(user = user) {
                     onClick(user.login)
+                }
+            }
+            item {
+                Button(
+                    onClick = onLoadMore,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(text = "Load More")
                 }
             }
         }
@@ -103,7 +136,4 @@ class MainActivity : ComponentActivity(), KodeinAware {
             )
         }
     }
-
 }
-
-

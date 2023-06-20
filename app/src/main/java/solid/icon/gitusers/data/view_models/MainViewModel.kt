@@ -17,16 +17,21 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     val users: MutableState<List<User>> = mutableStateOf(emptyList())
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
-    init {
-        fetchUsers()
-    }
+    private val userSize = 10
+    private var currentPage = 0
 
     private fun fetchUsers() {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            users.value = userRepository.getUsers()
+            val fetchedUsers = userRepository.getUsers(currentPage, userSize)
+            users.value = users.value + fetchedUsers
+            currentPage = users.value.last().id
             isLoading.value = false
         }
+    }
+
+    fun loadMoreUsers() {
+        fetchUsers()
     }
 
     fun goToUserDetails(login: String, context: Context) {
