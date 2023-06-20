@@ -1,4 +1,4 @@
-package solid.icon.gitusers.ui.theme
+package solid.icon.gitusers.ui.activities.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

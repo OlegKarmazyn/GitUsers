@@ -1,4 +1,4 @@
-package solid.icon.gitusers.activities.ui.theme
+package solid.icon.gitusers.ui.activities.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

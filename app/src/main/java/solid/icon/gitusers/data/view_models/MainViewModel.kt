@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import solid.icon.gitusers.activities.UserDetails
+import solid.icon.gitusers.ui.activities.UserDetails
 import solid.icon.gitusers.data.repositories.UserRepository
 import solid.icon.gitusers.data.repositories.users_data.User
 

@@ -1,4 +1,4 @@
-package solid.icon.gitusers.activities
+package solid.icon.gitusers.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
