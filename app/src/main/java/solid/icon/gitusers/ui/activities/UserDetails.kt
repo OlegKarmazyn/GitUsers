@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import solid.icon.gitusers.ui.activities.ui.theme.GitUsersTheme
+import solid.icon.gitusers.ui.theme.GitUsersTheme
 
 class UserDetails : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

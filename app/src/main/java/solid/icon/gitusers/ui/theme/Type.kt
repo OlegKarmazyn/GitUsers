@@ -1,4 +1,4 @@
-package solid.icon.gitusers.ui.activities.ui.theme
+package solid.icon.gitusers.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
