@@ -28,8 +28,10 @@ package solid.icon.gitusers
 //  1.8 set onClick and move to next Activity +
 //      using Intent give "login" +
 //  ------------------------------------------
-//  2. Show User's repositories
-//  2.1 define activity, cell for rep
+//  2. Show User's repositories +
+//  2.1 define activity, cell for rep +
 //      viewModel and model
 //  ------------------------------------------
-//  3. Create database and use it
+//  3. Implement pagination + loading
+//  ------------------------------------------
+//  4. Create database and use it

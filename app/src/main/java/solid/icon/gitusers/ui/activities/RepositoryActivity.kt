@@ -13,27 +13,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import solid.icon.gitusers.data.repositories.DetailsRepository
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.generic.instance
 import solid.icon.gitusers.data.repositories.users_data.Repository
-import solid.icon.gitusers.data.view_models.RepositoriesViewModel
+import solid.icon.gitusers.data.view_models.RepositoryViewModel
 
-class RepositoryActivity : ComponentActivity() {
-    private lateinit var viewModel: RepositoriesViewModel
+class RepositoryActivity : ComponentActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val viewModel: RepositoryViewModel by instance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val login = intent.getStringExtra("login")!!
-
-        viewModel = RepositoriesViewModel(DetailsRepository()).also {
-            it.fetchUserRepositories(login)
-        }
+        viewModel.setLoginByIntent(intent)
 
         setContent {
             val repositories by viewModel.repositories
             RepositoryScreen(repositories)
         }
     }
+
     @Composable
     fun RepositoryScreen(repositories: List<Repository>) {
         LazyColumn {
