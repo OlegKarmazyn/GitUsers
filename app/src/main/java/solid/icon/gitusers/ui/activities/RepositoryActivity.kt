@@ -3,15 +3,17 @@ package solid.icon.gitusers.ui.activities
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -31,17 +33,53 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
 
         setContent {
             val repositories by viewModel.repositories
-            RepositoryScreen(repositories)
+            val isLoading by viewModel.isLoading
+            RepositoryScreen(repositories, isLoading, viewModel.login)
         }
     }
 
     @Composable
-    fun RepositoryScreen(repositories: List<Repository>) {
-        LazyColumn {
-            items(repositories.size) { id ->
-                RepositoryItem(repositories[id])
+    fun RepositoryScreen(repositories: List<Repository>, isLoading: Boolean, login: String) {
+        Scaffold(
+            topBar = { RepositoryAppBar(onBackPressed = { onBackPressed() }, login = login) },
+            content = {
+                LazyColumn {
+                    items(repositories.size) { id ->
+                        RepositoryItem(repositories[id])
+                    }
+                }
+            }
+        )
+        LoadingBox(isLoading)
+    }
+
+    @Composable
+    fun LoadingBox(isLoading: Boolean) {
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
         }
+    }
+
+    @Composable
+    fun RepositoryAppBar(onBackPressed: () -> Unit, login: String) {
+        TopAppBar(
+            title = { Text(text = "$login Repository List") },
+            navigationIcon = {
+                IconButton(
+                    onClick = { onBackPressed() }
+                ) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+            }
+        )
     }
 
     @Composable

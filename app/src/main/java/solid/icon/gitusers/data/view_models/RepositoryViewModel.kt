@@ -6,26 +6,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import solid.icon.gitusers.data.Constants
 import solid.icon.gitusers.data.repositories.DetailsRepository
 import solid.icon.gitusers.data.repositories.users_data.Repository
 
 class RepositoryViewModel(private val detailsRepository: DetailsRepository) : ViewModel() {
 
     val repositories: MutableState<List<Repository>> = mutableStateOf(emptyList())
-    private var loginName: String = "login"
+    val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    var login = String()
 
     private fun fetchUserRepositories(login: String) {
         viewModelScope.launch {
+            isLoading.value = true
             repositories.value = detailsRepository.getUserRepositories(login)
+            isLoading.value = false
         }
     }
 
     fun setLoginByIntent(intent: Intent) {
         clearData()
-        fetchUserRepositories(intent.getStringExtra(loginName)!!)
+        login = intent.getStringExtra(Constants.loginName)!!
+        //note: call once fetch data
+        fetchUserRepositories(login)
     }
 
     private fun clearData() {
         repositories.value = emptyList()
+        isLoading.value = false
     }
 }
