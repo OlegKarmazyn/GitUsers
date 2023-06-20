@@ -21,7 +21,7 @@ class UserDetails : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val login = intent.getStringExtra("login")
+                    val login = this.intent.getStringExtra("login")
                     Greeting(login)
                 }
             }

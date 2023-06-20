@@ -20,13 +20,13 @@ package solid.icon.gitusers
 //  1. Get users in list
 //  1.1 make ipl. Kodein lib +
 //  1.2 define App (main) class +
-//  1.3 define viewModel for MainActivity
-//  1.4 define Model which get list (async)
-//  1.5 define repository for viewModel
-//  1.6 inject rep, VM using Kodein
-//  1.7 define View's list with scrolling
-//  1.8 set onClick and move to next Activity
-//      using Intent give "login"
+//  1.3 define viewModel for MainActivity +
+//  1.4 define Model which get list (async) +
+//  1.5 define repository for viewModel +
+//  1.6 inject rep, VM using Kodein +
+//  1.7 define View's list with scrolling +
+//  1.8 set onClick and move to next Activity +
+//      using Intent give "login" +
 //  ------------------------------------------
 //  2. Show User's repositories
 //  2.1 define activity, cell for rep
