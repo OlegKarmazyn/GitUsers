@@ -1,5 +1,7 @@
 package solid.icon.gitusers.data.repositories.users_data
 
-class Repository {
-    //TODO("Not yet implemented")
-}
+data class Repository(
+    val name: String,
+    val id: Int,
+    val description: String?
+)

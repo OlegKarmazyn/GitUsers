@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import solid.icon.gitusers.ui.activities.UserDetails
 import solid.icon.gitusers.data.repositories.UserRepository
 import solid.icon.gitusers.data.repositories.users_data.User
+import solid.icon.gitusers.ui.activities.RepositoryActivity
 
 class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     val users: MutableState<List<User>> = mutableStateOf(emptyList())
@@ -27,7 +27,7 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
     fun goToUserDetails(login: String, context: Context) {
-        val intent = Intent(context, UserDetails::class.java)
+        val intent = Intent(context, RepositoryActivity::class.java)
         intent.putExtra("login", login)
         context.startActivity(intent)
     }

@@ -16,7 +16,7 @@
         android:theme="@style/Theme.GitUsers"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.UserDetails"
+            android:name=".ui.activities.RepositoryActivity"
             android:exported="false"
             android:label="@string/title_activity_user_details"
             android:theme="@style/Theme.GitUsers">
