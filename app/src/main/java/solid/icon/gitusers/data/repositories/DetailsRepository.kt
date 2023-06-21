@@ -7,12 +7,16 @@ import solid.icon.gitusers.data.repositories.users_data.Repository
 
 class DetailsRepository {
 
-    suspend fun getUserRepositories(login: String): List<Repository> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            ApiClient.getApiService().getUserRepositories(login)
-        } catch (e: Exception) {
-            emptyList()
+    suspend fun getUserRepositories(
+        login: String,
+        page: Int,
+        perPage: Int
+    ): List<Repository> =
+        withContext(Dispatchers.IO) {
+            return@withContext try {
+                ApiClient.getApiService().getUserRepositories(login, page, perPage)
+            } catch (e: Exception) {
+                emptyList()
+            }
         }
-    }
-
 }

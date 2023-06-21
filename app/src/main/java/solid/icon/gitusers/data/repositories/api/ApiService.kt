@@ -15,5 +15,10 @@ interface ApiService {
     ): List<User>
 
     @GET("users/{login}/repos")
-    suspend fun getUserRepositories(@Path("login") login: String): List<Repository>
+    suspend fun getUserRepositories(
+        @Path("login") login: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): List<Repository>
+
 }
