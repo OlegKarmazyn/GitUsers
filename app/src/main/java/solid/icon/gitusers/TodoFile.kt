@@ -33,5 +33,10 @@ package solid.icon.gitusers
 //      viewModel and model
 //  ------------------------------------------
 //  3. Implement pagination + loading +-
+//  3.1 redone pagination in MainActivity
+//  3.2 add isEmptyList checking (hide button)
 //  ------------------------------------------
 //  4. Create database and use it
+//  4.1 define rep. files (suspend fun to get data)
+//  4.2 add data from api to db
+//  4.3 get data from api (viewModel)
