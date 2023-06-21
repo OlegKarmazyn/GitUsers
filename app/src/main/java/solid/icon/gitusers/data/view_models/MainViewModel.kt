@@ -20,12 +20,21 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val filesSize = 10
     private var currentUser = 0
 
+    init {
+        fetchUsers()
+    }
+
     private fun fetchUsers() {
-        isLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val fetchedUsers = userRepository.getUsers(currentUser, filesSize)
-            users.value = users.value + fetchedUsers
-            currentUser = users.value.last().id
+        try {
+            isLoading.value = true
+            viewModelScope.launch(Dispatchers.IO) {
+                val fetchedUsers = userRepository.getUsers(currentUser, filesSize)
+                users.value = users.value + fetchedUsers
+                currentUser = users.value.last().id
+            }
+        } catch (e: Exception) {
+            println(e.message)
+        } finally {
             isLoading.value = false
         }
     }

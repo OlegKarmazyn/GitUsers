@@ -9,10 +9,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -32,6 +30,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 import solid.icon.gitusers.data.repositories.users_data.User
 import solid.icon.gitusers.data.view_models.MainViewModel
+import solid.icon.gitusers.ui.components.LoadMoreButton
 import solid.icon.gitusers.ui.components.LoadingBox
 
 class MainActivity : ComponentActivity(), KodeinAware {
@@ -46,24 +45,14 @@ class MainActivity : ComponentActivity(), KodeinAware {
             val users by viewModel.users
             val isLoading by viewModel.isLoading
 
-            UserList(users, isLoading,
+            UserList(
+                users = users,
+                isLoading = isLoading,
                 onClick = { login ->
                     viewModel.goToUserDetails(login, this)
                 }, onLoadMore = {
                     viewModel.loadMoreUsers()
                 })
-
-            val listState = rememberLazyListState()
-            LaunchedEffect(listState) {
-                val visibleItemCount = listState.layoutInfo.visibleItemsInfo.size
-                val totalItemCount = listState.layoutInfo.totalItemsCount
-                val firstVisibleItemIndex =
-                    listState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-
-                if (visibleItemCount + firstVisibleItemIndex >= totalItemCount) {
-                    viewModel.loadMoreUsers()
-                }
-            }
         }
     }
 
@@ -82,14 +71,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
                 }
             }
             item {
-                Button(
-                    onClick = onLoadMore,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(text = "Load More")
-                }
+                LoadMoreButton(onLoadMore)
             }
         }
         LoadingBox(isLoading)

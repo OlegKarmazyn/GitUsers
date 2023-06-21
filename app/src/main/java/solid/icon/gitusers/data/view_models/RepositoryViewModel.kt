@@ -36,7 +36,7 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
     }
 
     private fun finishLoading() {
-        isLoading.value = true
+        isLoading.value = false
     }
 
 
