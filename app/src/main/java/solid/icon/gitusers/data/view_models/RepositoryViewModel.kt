@@ -21,32 +21,44 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
     private var page = 1
 
     fun fetchUserRepositories() {
-        isLoading.value = true
+        startLoading()
         viewModelScope.launch {
-            repositories.value = detailsRepository.getUserRepositories(login, page, perPage)
-            checkIfListEmpty(repositories.value)
-            isLoading.value = false
+            val incomeList = detailsRepository.getUserRepositories(login, page, perPage)
+            repositories.value += incomeList
+            checkIfListEmpty(incomeList)
+            finishLoading()
             increasePage()
         }
     }
+
+    private fun startLoading() {
+        isLoading.value = true
+    }
+
+    private fun finishLoading() {
+        isLoading.value = true
+    }
+
 
     private fun increasePage() {
         page++
     }
 
-    private fun checkIfListEmpty(list: List<Repository>): Boolean {
+    private fun checkIfListEmpty(list: List<Repository>) {
         isListEmpty.value = list.isEmpty()
-        return isListEmpty.value
     }
 
     fun setLoginByIntent(intent: Intent) {
         clearData()
         login = intent.getStringExtra(Constants.loginName)!!
+        //note: call at once fetch data (first page)
+        fetchUserRepositories()
     }
 
     private fun clearData() {
         repositories.value = emptyList()
         isLoading.value = false
         isListEmpty.value = false
+        page = 1
     }
 }

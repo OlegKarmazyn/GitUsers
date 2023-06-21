@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,29 +41,22 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
             val repositories by viewModel.repositories
             val isLoading by viewModel.isLoading
             val isListEmpty by viewModel.isListEmpty
-            showToastIfEmptyList(isListEmpty, viewModel.login)
-            RepositoryScreen(repositories, isLoading, viewModel.login,
+
+            RepositoryScreen(
+                repositories = repositories,
+                isLoading = isLoading,
+                isListEmpty = isListEmpty,
+                login = viewModel.login,
                 onLoadMore = {
                     viewModel.fetchUserRepositories()
-                })
-
-            val listState = rememberLazyListState()
-            LaunchedEffect(listState) {
-                val visibleItemCount = listState.layoutInfo.visibleItemsInfo.size
-                val totalItemCount = listState.layoutInfo.totalItemsCount
-                val firstVisibleItemIndex =
-                    listState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-
-                if (visibleItemCount + firstVisibleItemIndex >= totalItemCount) {
-                    viewModel.fetchUserRepositories()
                 }
-            }
+            )
         }
     }
 
     @Composable
     fun RepositoryScreen(
-        repositories: List<Repository>, isLoading: Boolean, login: String,
+        repositories: List<Repository>, isLoading: Boolean, isListEmpty: Boolean, login: String,
         onLoadMore: () -> Unit
     ) {
         Scaffold(
@@ -72,7 +67,10 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
                         RepositoryItem(repositories[id])
                     }
                     item {
-                        LoadMoreButton(onLoadMore)
+                        if (isListEmpty)
+                            showToastIfEmptyList(login)
+                        else
+                            LoadMoreButton(onLoadMore)
                     }
                 }
             }
@@ -119,8 +117,6 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
         }
     }
 
-    private fun showToastIfEmptyList(isListEmpty: Boolean, login: String) {
-        if (isListEmpty)
-            Toasty.warning(this, "$login doesn't have repositories").show()
-    }
+    private fun showToastIfEmptyList(login: String) =
+        Toasty.warning(this, "$login has no more repositories").show()
 }
