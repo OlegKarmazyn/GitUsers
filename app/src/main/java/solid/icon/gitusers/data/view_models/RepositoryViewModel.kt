@@ -39,7 +39,6 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
         isLoading.value = false
     }
 
-
     private fun increasePage() {
         page++
     }

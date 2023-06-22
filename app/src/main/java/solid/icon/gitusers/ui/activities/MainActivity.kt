@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import com.squareup.picasso.Picasso
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.kodein.di.KodeinAware
@@ -44,10 +45,12 @@ class MainActivity : ComponentActivity(), KodeinAware {
         setContent {
             val users by viewModel.users
             val isLoading by viewModel.isLoading
+            val isListEmpty by viewModel.isListEmpty
 
             UserList(
                 users = users,
                 isLoading = isLoading,
+                isListEmpty = isListEmpty,
                 onClick = { login ->
                     viewModel.goToUserDetails(login, this)
                 }, onLoadMore = {
@@ -60,8 +63,9 @@ class MainActivity : ComponentActivity(), KodeinAware {
     fun UserList(
         users: List<User>,
         isLoading: Boolean,
+        isListEmpty: Boolean,
         onClick: (login: String) -> Unit,
-        onLoadMore: () -> Unit
+        onLoadMore: () -> Unit,
     ) {
         LazyColumn {
             items(users.size) { id ->
@@ -71,7 +75,10 @@ class MainActivity : ComponentActivity(), KodeinAware {
                 }
             }
             item {
-                LoadMoreButton(onLoadMore)
+                if (isListEmpty)
+                    showNoMoreUsersToast()
+                else
+                    LoadMoreButton(onLoadMore)
             }
         }
         LoadingBox(isLoading)
@@ -118,4 +125,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
             )
         }
     }
+
+    private fun showNoMoreUsersToast() =
+        Toasty.warning(this, "no more users").show()
 }

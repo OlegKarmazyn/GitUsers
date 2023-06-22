@@ -15,6 +15,7 @@ import solid.icon.gitusers.ui.activities.RepositoryActivity
 class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     val users: MutableState<List<User>> = mutableStateOf(emptyList())
+    val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
     private val filesSize = 10
@@ -25,22 +26,23 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
     private fun fetchUsers() {
-        try {
-            isLoading.value = true
-            viewModelScope.launch(Dispatchers.IO) {
-                val fetchedUsers = userRepository.getUsers(currentUser, filesSize)
-                users.value = users.value + fetchedUsers
-                currentUser = users.value.last().id
-            }
-        } catch (e: Exception) {
-            println(e.message)
-        } finally {
+        isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val incomeList = userRepository.getUsers(currentUser, filesSize)
+            users.value += incomeList
+            if (!checkIfListEmpty(incomeList))
+                currentUser = incomeList.last().id
             isLoading.value = false
         }
     }
 
     fun loadMoreUsers() {
         fetchUsers()
+    }
+
+    private fun checkIfListEmpty(list: List<User>): Boolean {
+        isListEmpty.value = list.isEmpty()
+        return isListEmpty.value
     }
 
     fun goToUserDetails(login: String, context: Context) {
