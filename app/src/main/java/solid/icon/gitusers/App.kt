@@ -20,7 +20,7 @@ class App : Application(), KodeinAware {
         bind() from singleton { UserDatabase(instance()) }
 
         bind() from singleton { UserRepository(instance()) }
-        bind() from singleton { DetailsRepository() }
+        bind() from singleton { DetailsRepository(instance()) }
 
         bind() from singleton { MainViewModel(instance()) }
         bind() from singleton { RepositoryViewModel(instance()) }

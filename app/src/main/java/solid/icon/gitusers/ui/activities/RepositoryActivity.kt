@@ -48,7 +48,7 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
                 isListEmpty = isListEmpty,
                 login = viewModel.login,
                 onLoadMore = {
-                    viewModel.fetchUserRepositories()
+                    viewModel.loadMoreRepositories()
                 }
             )
         }
