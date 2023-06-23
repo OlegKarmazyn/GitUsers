@@ -5,10 +5,11 @@ import kotlinx.coroutines.withContext
 import solid.icon.gitusers.data.database.UserDatabase
 import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.repositories.api.ApiClient
+import solid.icon.gitusers.data.repositories.api.ApiService
 
-class DetailsRepository(
-    private val db: UserDatabase
-) {
+class DetailsRepository(private val db: UserDatabase) {
+
+    private val apiService: ApiService = ApiClient.getApiService()
 
     suspend fun getUserRepositories(
         login: String,
@@ -17,7 +18,7 @@ class DetailsRepository(
     ): List<RepositoryItem> =
         withContext(Dispatchers.IO) {
             return@withContext try {
-                ApiClient.getApiService().getUserRepositories(login, page, perPage)
+                apiService.getUserRepositories(login, page, perPage)
             } catch (e: Exception) {
                 emptyList()
             }

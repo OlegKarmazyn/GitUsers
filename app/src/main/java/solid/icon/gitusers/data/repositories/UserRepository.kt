@@ -7,9 +7,7 @@ import solid.icon.gitusers.data.database.entities.UserItem
 import solid.icon.gitusers.data.repositories.api.ApiClient
 import solid.icon.gitusers.data.repositories.api.ApiService
 
-class UserRepository(
-    private val db: UserDatabase
-) {
+class UserRepository(private val db: UserDatabase) {
 
     private val apiService: ApiService = ApiClient.getApiService()
 

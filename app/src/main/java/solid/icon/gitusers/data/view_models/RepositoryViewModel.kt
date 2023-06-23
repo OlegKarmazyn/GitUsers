@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import solid.icon.gitusers.data.Constants
+import solid.icon.gitusers.data.Constants.perPage
 import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.repositories.DetailsRepository
 
@@ -17,14 +18,9 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
     val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
-    private var login: String = ""
+    var login: String = ""
     private var page: Int = 1
-    private var perPage: Int = 10
     private var lastRepositoryName: String = ""
-
-    init {
-        clearData()
-    }
 
     fun loadMoreRepositories() {
         getRepositoriesFromDB()
@@ -81,6 +77,7 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
         return isEmpty
     }
 
+    //initialization
     fun setLoginByIntent(intent: Intent) {
         clearData()
         login = intent.getStringExtra(Constants.loginName).orEmpty()
