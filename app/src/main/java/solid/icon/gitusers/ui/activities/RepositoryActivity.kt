@@ -22,7 +22,7 @@ import es.dmoral.toasty.Toasty
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
-import solid.icon.gitusers.data.repositories.users_data.Repository
+import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.view_models.RepositoryViewModel
 import solid.icon.gitusers.ui.components.LoadMoreButton
 import solid.icon.gitusers.ui.components.LoadingBox
@@ -56,7 +56,7 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
 
     @Composable
     fun RepositoryScreen(
-        repositories: List<Repository>, isLoading: Boolean, isListEmpty: Boolean, login: String,
+        repositories: List<RepositoryItem>, isLoading: Boolean, isListEmpty: Boolean, login: String,
         onLoadMore: () -> Unit
     ) {
         Scaffold(
@@ -93,7 +93,7 @@ class RepositoryActivity : ComponentActivity(), KodeinAware {
     }
 
     @Composable
-    fun RepositoryItem(repository: Repository) {
+    fun RepositoryItem(repository: RepositoryItem) {
         val expanded = remember { mutableStateOf(false) }
 
         Column(

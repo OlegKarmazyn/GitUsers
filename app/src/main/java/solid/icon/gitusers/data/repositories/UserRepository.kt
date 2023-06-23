@@ -2,15 +2,18 @@ package solid.icon.gitusers.data.repositories
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import solid.icon.gitusers.data.database.UserDatabase
+import solid.icon.gitusers.data.database.entities.UserItem
 import solid.icon.gitusers.data.repositories.api.ApiClient
 import solid.icon.gitusers.data.repositories.api.ApiService
-import solid.icon.gitusers.data.repositories.users_data.User
 
-class UserRepository {
+class UserRepository(
+    private val db: UserDatabase
+) {
 
     private val apiService: ApiService = ApiClient.getApiService()
 
-    suspend fun getUsers(currentUser: Int, filesSize: Int): List<User> =
+    suspend fun getUsers(currentUser: Int, filesSize: Int): List<UserItem> =
         withContext(Dispatchers.IO) {
             return@withContext try {
                 apiService.getUsers(currentUser, filesSize)
@@ -18,5 +21,9 @@ class UserRepository {
                 emptyList()
             }
         }
-}
 
+    suspend fun upsertList(list: List<UserItem>) = db.getUserDao().upsertList(list)
+
+    suspend fun getListOfUsers(lastUserId: Int, pageSize: Int): List<UserItem> =
+        db.getUserDao().getUsersWithPagination(lastUserId, pageSize)
+}

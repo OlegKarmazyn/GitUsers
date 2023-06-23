@@ -8,12 +8,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import solid.icon.gitusers.data.Constants
 import solid.icon.gitusers.data.Constants.perPage
+import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.repositories.DetailsRepository
-import solid.icon.gitusers.data.repositories.users_data.Repository
 
 class RepositoryViewModel(private val detailsRepository: DetailsRepository) : ViewModel() {
 
-    val repositories: MutableState<List<Repository>> = mutableStateOf(emptyList())
+    val repositories: MutableState<List<RepositoryItem>> = mutableStateOf(emptyList())
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
     val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
 
@@ -43,7 +43,7 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
         page++
     }
 
-    private fun checkIfListEmpty(list: List<Repository>) {
+    private fun checkIfListEmpty(list: List<RepositoryItem>) {
         isListEmpty.value = list.isEmpty()
     }
 

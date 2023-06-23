@@ -7,8 +7,8 @@ import solid.icon.gitusers.data.database.entities.UserItem
 @Dao
 interface UserDao {
 
-    @Insert
-    suspend fun insert(items: List<UserItem>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertList(items: List<UserItem>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(item: UserItem)
@@ -16,6 +16,7 @@ interface UserDao {
     @Delete
     suspend fun delete(item: UserItem)
 
-    @Query("SELECT * FROM UserItem")
-    fun getAllUserItems(): LiveData<List<UserItem>>
+    @Query("SELECT * FROM UserItem WHERE id > :lastUserId ORDER BY id ASC LIMIT :pageSize")
+    suspend fun getUsersWithPagination(lastUserId: Int, pageSize: Int): List<UserItem>
+
 }

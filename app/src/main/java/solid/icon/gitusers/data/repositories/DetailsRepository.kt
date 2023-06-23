@@ -2,8 +2,8 @@ package solid.icon.gitusers.data.repositories
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.repositories.api.ApiClient
-import solid.icon.gitusers.data.repositories.users_data.Repository
 
 class DetailsRepository {
 
@@ -11,7 +11,7 @@ class DetailsRepository {
         login: String,
         page: Int,
         perPage: Int
-    ): List<Repository> =
+    ): List<RepositoryItem> =
         withContext(Dispatchers.IO) {
             return@withContext try {
                 ApiClient.getApiService().getUserRepositories(login, page, perPage)

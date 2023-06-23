@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class UserItem(
+    @PrimaryKey var id: Int,
     @ColumnInfo var login: String,
     @ColumnInfo var avatar_url: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
-}
+)

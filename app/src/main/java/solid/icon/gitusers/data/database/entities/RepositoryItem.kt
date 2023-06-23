@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RepositoryItem(
+    @PrimaryKey var id: Int? = null,
     @ColumnInfo var name: String,
     @ColumnInfo var description: String?
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
-}
+)

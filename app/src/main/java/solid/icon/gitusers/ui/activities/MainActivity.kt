@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
-import solid.icon.gitusers.data.repositories.users_data.User
+import solid.icon.gitusers.data.database.entities.UserItem
 import solid.icon.gitusers.data.view_models.MainViewModel
 import solid.icon.gitusers.ui.components.LoadMoreButton
 import solid.icon.gitusers.ui.components.LoadingBox
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
 
     @Composable
     fun UserList(
-        users: List<User>,
+        users: List<UserItem>,
         isLoading: Boolean,
         isListEmpty: Boolean,
         onClick: (login: String) -> Unit,
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
     }
 
     @Composable
-    fun UserCell(user: User, onUserClick: () -> Unit) {
+    fun UserCell(user: UserItem, onUserClick: () -> Unit) {
         val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
 
         LaunchedEffect(user.avatar_url) {

@@ -7,6 +7,7 @@ import org.kodein.di.android.x.androidXModule
 import org.kodein.di.generic.bind
 import org.kodein.di.generic.instance
 import org.kodein.di.generic.singleton
+import solid.icon.gitusers.data.database.UserDatabase
 import solid.icon.gitusers.data.repositories.DetailsRepository
 import solid.icon.gitusers.data.repositories.UserRepository
 import solid.icon.gitusers.data.view_models.MainViewModel
@@ -16,9 +17,9 @@ class App : Application(), KodeinAware {
     override val kodein: Kodein = Kodein.lazy {
         import(androidXModule(this@App))
 
-        //bind() from singleton { UserDatabase(instance()) }
+        bind() from singleton { UserDatabase(instance()) }
 
-        bind() from singleton { UserRepository() } //todo define database *instance()*
+        bind() from singleton { UserRepository(instance()) }
         bind() from singleton { DetailsRepository() }
 
         bind() from singleton { MainViewModel(instance()) }
