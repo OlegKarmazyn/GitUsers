@@ -22,7 +22,6 @@ class MainViewModel(
     val users: MutableState<List<UserItem>> = mutableStateOf(emptyList())
     val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
-    val isInternetConnected: MutableState<Boolean> = mutableStateOf(true)
 
     private var lastUserId = 0
 
@@ -83,7 +82,8 @@ class MainViewModel(
 
     private fun getInternetConnection(): Boolean {
         val isInternet = connection.isInternetConnected()
-        isInternetConnected.value = isInternet
+        if (!isInternet)
+            connection.showNoInternetConnection()
         return isInternet
     }
 

@@ -3,6 +3,7 @@ package solid.icon.gitusers.data.repositories
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import es.dmoral.toasty.Toasty
 
 class InternetConnection(private val context: Context) {
 
@@ -16,4 +17,7 @@ class InternetConnection(private val context: Context) {
         return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             ?: false
     }
+
+    fun showNoInternetConnection() =
+        Toasty.error(context, "No Internet connection").show()
 }
