@@ -10,8 +10,8 @@ Please attach a video of a few seconds demonstrating the project along with the 
 The design is arbitrary but should be clear and follow Google's recommendations.
 The task should be completed using the MVVM architecture, Kotlin, and Android Compose.
 
-Online-mode
-![](https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/online-mode.gif)
+<h3>Online-mode</h3>
+<img src="https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/online-mode.gif" width="270" height="500"/>
 
-Offline-mode
-![](https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/offline-mode.gif)
+<h3>Offline-mode</h3>
+<img src="https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/offline-mode.gif" width="270" height="500"/>
