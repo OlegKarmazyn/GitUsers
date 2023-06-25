@@ -10,14 +10,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import solid.icon.gitusers.data.Constants.perPage
 import solid.icon.gitusers.data.database.entities.UserItem
+import solid.icon.gitusers.data.repositories.InternetConnection
 import solid.icon.gitusers.data.repositories.UserRepository
 import solid.icon.gitusers.ui.activities.RepositoryActivity
 
-class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
+class MainViewModel(
+    private val userRepository: UserRepository,
+    private val connection: InternetConnection
+) : ViewModel() {
 
     val users: MutableState<List<UserItem>> = mutableStateOf(emptyList())
     val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isInternetConnected: MutableState<Boolean> = mutableStateOf(true)
 
     private var lastUserId = 0
 
@@ -26,20 +31,19 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
     }
 
     fun loadMoreUsers() {
-        getUsersFromDB()
-    }
-
-    private fun getUsersFromDB() {
         startLoading()
         viewModelScope.launch {
-            val incomeList = userRepository.getListOfUsers(lastUserId, perPage)
-            if (incomeList.isNotEmpty()) {
+            val incomeList = getUsersFromDB()
+            if (incomeList.isNotEmpty()) { //if no users in db
                 updateUsersList(incomeList)
                 lastUserId = incomeList.last().id
+                finishLoading()
             } else {
-                fetchUsersFromApi()
+                if (getInternetConnection())
+                    fetchUsersFromApi()
+                else
+                    finishLoading()
             }
-            finishLoading()
         }
     }
 
@@ -50,11 +54,16 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
                 saveDataToDB(incomeList)
                 loadMoreUsers()
             }
+            finishLoading()
         }
     }
 
     private suspend fun saveDataToDB(list: List<UserItem>) {
         userRepository.upsertList(list)
+    }
+
+    private suspend fun getUsersFromDB(): List<UserItem> {
+        return userRepository.getListOfUsers(lastUserId, perPage)
     }
 
     private fun updateUsersList(incomeList: List<UserItem>) {
@@ -70,6 +79,12 @@ class MainViewModel(private val userRepository: UserRepository) : ViewModel() {
         val intent = Intent(context, RepositoryActivity::class.java)
         intent.putExtra("login", login)
         context.startActivity(intent)
+    }
+
+    private fun getInternetConnection(): Boolean {
+        val isInternet = connection.isInternetConnected()
+        isInternetConnected.value = isInternet
+        return isInternet
     }
 
     private fun finishLoading() {

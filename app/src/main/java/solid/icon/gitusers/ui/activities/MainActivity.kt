@@ -48,11 +48,13 @@ class MainActivity : ComponentActivity(), KodeinAware {
             val users by viewModel.users
             val isLoading by viewModel.isLoading
             val isListEmpty by viewModel.isListEmpty
+            val isInternetConnected by viewModel.isInternetConnected
 
             UserList(
                 users = users,
                 isLoading = isLoading,
                 isListEmpty = isListEmpty,
+                isInternetConnected = isInternetConnected,
                 onClick = { login ->
                     viewModel.goToUserDetails(login, this)
                 }, onLoadMore = {
@@ -66,6 +68,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
         users: List<UserItem>,
         isLoading: Boolean,
         isListEmpty: Boolean,
+        isInternetConnected: Boolean,
         onClick: (login: String) -> Unit,
         onLoadMore: () -> Unit,
     ) {
@@ -77,6 +80,9 @@ class MainActivity : ComponentActivity(), KodeinAware {
                 }
             }
             item {
+                if (!isInternetConnected)
+                    showNoInternetConnection()
+
                 if (isListEmpty)
                     showNoMoreUsersToast()
                 else
@@ -136,4 +142,7 @@ class MainActivity : ComponentActivity(), KodeinAware {
 
     private fun showNoMoreUsersToast() =
         Toasty.warning(this, "no more users").show()
+
+    private fun showNoInternetConnection() =
+        Toasty.error(this, "no Internet Connection").show()
 }
