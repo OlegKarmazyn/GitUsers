@@ -1,5 +1,6 @@
 package solid.icon.gitusers.ui.activities
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,6 +30,7 @@ import kotlinx.coroutines.withContext
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
+import solid.icon.gitusers.R
 import solid.icon.gitusers.data.database.entities.UserItem
 import solid.icon.gitusers.data.view_models.MainViewModel
 import solid.icon.gitusers.ui.components.LoadMoreButton
@@ -86,12 +88,20 @@ class MainActivity : ComponentActivity(), KodeinAware {
 
     @Composable
     fun UserCell(user: UserItem, onUserClick: () -> Unit) {
-        val imageBitmap: MutableState<ImageBitmap?> = remember { mutableStateOf(null) }
+        val imageBitmap: MutableState<ImageBitmap> = remember {
+            mutableStateOf(
+                BitmapFactory.decodeResource(resources, R.drawable.user).asImageBitmap()
+            )
+        }
 
         LaunchedEffect(user.avatar_url) {
             withContext(Dispatchers.IO) {
-                val bitmap = Picasso.get().load(user.avatar_url).get()
-                imageBitmap.value = bitmap.asImageBitmap()
+                try {
+                    val bitmap = Picasso.get().load(user.avatar_url).get()
+                    imageBitmap.value = bitmap.asImageBitmap()
+                } catch (e: Exception) {
+                    println(e.message)
+                }
             }
         }
 
@@ -107,16 +117,14 @@ class MainActivity : ComponentActivity(), KodeinAware {
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            imageBitmap.value?.let { bitmap ->
-                Image(
-                    painter = BitmapPainter(bitmap),
-                    contentDescription = "User Photo",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .border(1.5.dp, MaterialTheme.colors.onSecondary, CircleShape)
-                )
-            }
+            Image(
+                painter = BitmapPainter(imageBitmap.value),
+                contentDescription = "User Photo",
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .border(1.5.dp, MaterialTheme.colors.onSecondary, CircleShape)
+            )
 
             Text(
                 text = user.login,

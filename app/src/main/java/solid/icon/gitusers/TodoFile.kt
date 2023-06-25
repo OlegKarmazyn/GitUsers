@@ -41,9 +41,14 @@ todo:
     3.1 redone pagination in MainActivity +
     3.2 add isEmptyList checking (hide button) +
     ------------------------------------------
-    4. Create database and use it
-    4.1 define rep. files (suspend fun to get data)
-    4.2 add data from api to db
-    4.3 get data from api (viewModel)
+    4. Create database and use it +
+    4.1 define rep. files (suspend fun to get data) +
+    4.2 add data from api to db +
+    4.3 get data from api (viewModel) +
+    ------------------------------------------
+    5. Improve the project
+    5.1 fix loading +
+    5.2 make toast if no internet
+    5.3 make default avatar img if no internet +
  */
 //endregion
