@@ -26,6 +26,6 @@ class App : Application(), KodeinAware {
         bind() from singleton { DetailsRepository(instance()) }
 
         bind() from singleton { MainViewModel(instance(), instance()) }
-        bind() from singleton { RepositoryViewModel(instance()) }
+        bind() from singleton { RepositoryViewModel(instance(), instance()) }
     }
 }

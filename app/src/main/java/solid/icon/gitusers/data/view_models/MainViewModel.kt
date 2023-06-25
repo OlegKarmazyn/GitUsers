@@ -38,7 +38,7 @@ class MainViewModel(
                 lastUserId = incomeList.last().id
                 finishLoading()
             } else {
-                if (getInternetConnection())
+                if (isInternetConnected())
                     fetchUsersFromApi()
                 else
                     finishLoading()
@@ -80,11 +80,11 @@ class MainViewModel(
         context.startActivity(intent)
     }
 
-    private fun getInternetConnection(): Boolean {
-        val isInternet = connection.isInternetConnected()
-        if (!isInternet)
+    private fun isInternetConnected(): Boolean {
+        val isConnected = connection.isInternetConnected()
+        if (!isConnected)
             connection.showNoInternetConnection()
-        return isInternet
+        return isConnected
     }
 
     private fun finishLoading() {

@@ -11,8 +11,12 @@ import solid.icon.gitusers.data.Constants
 import solid.icon.gitusers.data.Constants.perPage
 import solid.icon.gitusers.data.database.entities.RepositoryItem
 import solid.icon.gitusers.data.repositories.DetailsRepository
+import solid.icon.gitusers.data.repositories.InternetConnection
 
-class RepositoryViewModel(private val detailsRepository: DetailsRepository) : ViewModel() {
+class RepositoryViewModel(
+    private val detailsRepository: DetailsRepository,
+    private val connection: InternetConnection
+) : ViewModel() {
 
     val repositories: MutableState<List<RepositoryItem>> = mutableStateOf(emptyList())
     val isListEmpty: MutableState<Boolean> = mutableStateOf(false)
@@ -22,21 +26,26 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
     private var page: Int = 1
     private var lastRepositoryName: String = ""
 
-    fun loadMoreRepositories() {
-        getRepositoriesFromDB()
+    //initialization
+    fun setLoginByIntent(intent: Intent) {
+        clearData()
+        login = intent.getStringExtra(Constants.loginName).orEmpty()
+        loadMoreRepositories()
     }
 
-    private fun getRepositoriesFromDB() {
+    fun loadMoreRepositories() {
         startLoading()
         viewModelScope.launch {
-            val incomeList =
-                detailsRepository.getListOfRepositories(login, lastRepositoryName, perPage)
+            val incomeList = getRepositoriesFromDB()
             if (incomeList.isNotEmpty()) {
                 increaseList(incomeList)
+                finishLoading()
             } else {
-                fetchRepositoriesFromApi()
+                if (isInternetConnected())
+                    fetchRepositoriesFromApi()
+                else
+                    finishLoading()
             }
-            finishLoading()
         }
     }
 
@@ -45,8 +54,8 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
             val incomeList = detailsRepository.getUserRepositories(login, page, perPage)
             if (!checkIfListEmpty(incomeList)) {
                 saveDataToDB(incomeList)
-                page++
             }
+            finishLoading()
         }
     }
 
@@ -58,9 +67,21 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
         increaseList(list)
     }
 
+    private suspend fun getRepositoriesFromDB(): List<RepositoryItem> {
+        return detailsRepository.getListOfRepositories(login, lastRepositoryName, perPage)
+    }
+
     private fun increaseList(incomeList: List<RepositoryItem>) {
+        page++
         repositories.value += incomeList
         lastRepositoryName = incomeList.lastOrNull()?.name.orEmpty()
+    }
+
+    private fun isInternetConnected(): Boolean {
+        val isConnected = connection.isInternetConnected()
+        if (!isConnected)
+            connection.showNoInternetConnection()
+        return isConnected
     }
 
     private fun startLoading() {
@@ -75,13 +96,6 @@ class RepositoryViewModel(private val detailsRepository: DetailsRepository) : Vi
         val isEmpty = list.isEmpty()
         isListEmpty.value = isEmpty
         return isEmpty
-    }
-
-    //initialization
-    fun setLoginByIntent(intent: Intent) {
-        clearData()
-        login = intent.getStringExtra(Constants.loginName).orEmpty()
-        loadMoreRepositories()
     }
 
     private fun clearData() {
