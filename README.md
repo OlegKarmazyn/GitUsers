@@ -9,3 +9,9 @@
 Please attach a video of a few seconds demonstrating the project along with the completed task.
 The design is arbitrary but should be clear and follow Google's recommendations.
 The task should be completed using the MVVM architecture, Kotlin, and Android Compose.
+
+Online-mode
+![](https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/online-mode.gif)
+
+Offline-mode
+![](https://github.com/OlegKarmazyn/GitUsers/blob/main/gifs/offline-mode.gif)
